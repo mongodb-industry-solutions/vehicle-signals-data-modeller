@@ -1,0 +1,153 @@
+.metadataContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.metadataItem {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.metadataItem:nth-child(odd) {
+  background-color: var(--muted);
+}
+
+.metadataLabel {
+  text-align: right;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.metadataValue {
+  word-break: break-word;
+}
+
+/* Edit mode styles */
+.metadataItemEdit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.fieldHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fieldValue {
+  width: 100%;
+}
+
+.inputField,
+.textareaField,
+.selectField {
+  width: 100%;
+}
+
+.textareaField {
+  min-height: 80px;
+}
+
+.typeSelect {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.deleteButton {
+  flex-shrink: 0;
+}
+
+.addNewFieldSection {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background-color: var(--card);
+  border: 1px dashed var(--border);
+}
+
+.addNewFieldTitle {
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.addNewFieldForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.addNewFieldRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.newFieldInput {
+  flex: 2;
+}
+
+.newFieldTypeSelect {
+  flex: 1;
+}
+
+.newFieldValueInput {
+  flex: 1;
+}
+
+.addFieldButton {
+  flex-shrink: 0;
+}
+
+.badgeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.typeBadge {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.signalTypeOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.typeDescription {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.noMetadata {
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--muted-foreground);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: var(--muted-foreground);
+}
+
+.errorContainer {
+  color: var(--destructive);
+  text-align: center;
+  padding: 1rem;
+}
