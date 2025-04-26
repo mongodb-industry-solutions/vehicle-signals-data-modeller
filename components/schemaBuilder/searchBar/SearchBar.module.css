@@ -1,0 +1,29 @@
+.searchFilterContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.searchInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.searchInput {
+  padding-left: 2.5rem;
+  flex: 1;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+}

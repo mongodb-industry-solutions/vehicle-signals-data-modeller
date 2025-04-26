@@ -24,6 +24,8 @@ export async function POST(req, { params }) {
       pipeline,
       document,
       documents,
+      operations,
+      options,
     } = body;
 
     if (
@@ -31,7 +33,9 @@ export async function POST(req, { params }) {
       (!filter &&
         action !== "aggregate" &&
         action !== "insertOne" &&
-        action !== "insertMany")
+        action !== "insertMany" &&
+        action !== "bulkWrite" &&
+        action !== "replaceOne")
     ) {
       return NextResponse.json(
         { message: "Missing required fields: collection, filter/pipeline" },
@@ -64,12 +68,12 @@ export async function POST(req, { params }) {
         result = await col.findOne(filter, { projection });
         break;
       case "find":
-        const options = {};
-        if (projection) options.projection = projection;
-        if (sort) options.sort = sort;
-        if (limit) options.limit = limit;
+        const findOptions = {};
+        if (projection) findOptions.projection = projection;
+        if (sort) findOptions.sort = sort;
+        if (limit) findOptions.limit = limit;
 
-        result = await col.find(filter, options).toArray();
+        result = await col.find(filter, findOptions).toArray();
         break;
       case "insertOne":
         if (!document) {
@@ -91,6 +95,32 @@ export async function POST(req, { params }) {
           );
         }
         result = await col.insertMany(documents);
+        break;
+      case "replaceOne":
+        if (!document) {
+          return NextResponse.json(
+            { message: "Missing required field: document" },
+            { status: 400 }
+          );
+        }
+        result = await col.replaceOne(filter, document);
+        break;
+      case "bulkWrite":
+        if (
+          !operations ||
+          !Array.isArray(operations) ||
+          operations.length === 0
+        ) {
+          return NextResponse.json(
+            {
+              message:
+                "Missing or invalid required field: operations (must be a non-empty array)",
+            },
+            { status: 400 }
+          );
+        }
+
+        result = await col.bulkWrite(operations, options || {});
         break;
       case "updateOne":
         if (!update) {
