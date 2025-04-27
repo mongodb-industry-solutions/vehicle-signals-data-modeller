@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo, use } from "react";
+import { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
-import { Save, FileUp, FileDown } from "lucide-react";
+import { Save, FileUp, FileDown, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -41,6 +41,7 @@ import {
   fetchMetadata,
   loadTemplate,
   saveSchema as apiSaveSchema,
+  deleteTemplate,
 } from "@/lib/api";
 import { filterDocumentStructure } from "@/lib/filterUtils";
 
@@ -499,6 +500,64 @@ export default function SchemaBuilder() {
     });
   };
 
+  // Handle deleting a template
+  const handleDeleteTemplate = async (templateId) => {
+    try {
+      if (templateId === "my_custom_schema") {
+        // Don't allow deleting the base template
+        alert("Cannot delete the base VSS template");
+        return;
+      }
+
+      if (currentTemplate === templateId) {
+        // Don't allow deleting the currently active template
+        alert(
+          "Cannot delete the currently active template. Please load a different template first."
+        );
+        return;
+      }
+
+      const confirmDelete = confirm(
+        `Are you sure you want to delete the template "${formatTemplateNameForDisplay(
+          templateId
+        )}"? This action cannot be undone.`
+      );
+
+      if (!confirmDelete) {
+        return;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      // Call the API function to delete the template
+      await deleteTemplate(templateId);
+
+      // Refresh the available templates list
+      const templates = await fetchAvailableSchemas({
+        excludeTemplate: null,
+      });
+
+      if (!templates.includes(BASE_TEMPLATE.template)) {
+        setAvailableTemplates([BASE_TEMPLATE.template, ...templates]);
+      } else {
+        setAvailableTemplates(templates);
+      }
+
+      alert(
+        `Template "${formatTemplateNameForDisplay(
+          templateId
+        )}" has been deleted.`
+      );
+    } catch (err) {
+      console.error("Error deleting template:", err);
+      setError(err.message);
+      alert(`Error deleting template: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -561,6 +620,21 @@ export default function SchemaBuilder() {
                           <FileDown className="h-4 w-4 mr-2" />
                           {currentTemplate === template ? "Current" : "Load"}
                         </Button>
+
+                        {template !== "my_custom_schema" && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteTemplate(template);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete
+                          </Button>
+                        )}
                       </CardFooter>
                     </Card>
                   ))

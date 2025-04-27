@@ -148,6 +148,9 @@ export async function POST(req, { params }) {
       case "deleteMany":
         result = await col.deleteMany(filter);
         break;
+      case "deleteOne":
+        result = await col.deleteOne(filter);
+        break;
       case "aggregate":
         if (!pipeline) {
           return NextResponse.json(

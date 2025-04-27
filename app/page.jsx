@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SchemaBuilder from "@/components/schemaBuilder/schemaBuilder";
+import SchemaBuilder from "@/components/schemaBuilder/SchemaBuilder";
 import UseCaseManager from "@/components/use-case-manager";
 import ResultsView from "@/components/results-view";
 
