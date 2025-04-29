@@ -396,7 +396,8 @@ export default function QuerySandbox({
             <Search className={styles.noSampleDataIcon} />
             <h3 className={styles.noSampleDataTitle}>Sample Data Required</h3>
             <p className={styles.noSampleDataDescription}>
-              Generate sample data before using the query sandbox.
+              Generate sample data adn esport it to a database before using the
+              query sandbox.
             </p>
             <Button
               className={styles.generateSampleDataButton}

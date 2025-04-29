@@ -277,7 +277,7 @@ export default function SampleDocument({ app, schema }) {
 
       toast({
         title: "Export successful",
-        description: `${result.count} documents exported to MongoDB samples collection`,
+        description: `${result.count} documents exported to database`,
         variant: "default",
       });
     } catch (error) {
@@ -650,7 +650,7 @@ export default function SampleDocument({ app, schema }) {
             ) : (
               <>
                 <Database className="mr-2 h-4 w-4" />
-                Export to MongoDB
+                Export to Database
               </>
             )}
           </Button>
