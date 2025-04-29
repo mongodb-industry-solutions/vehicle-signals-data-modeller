@@ -35,6 +35,9 @@ import SampleDocument from "./sampleDocument/SampleDocument";
 import QuerySandbox from "./querySandbox/QuerySandbox";
 
 export default function ResultsView() {
+  // Check if we're in COVESA version
+  const isCovesaVersion = process.env.NEXT_PUBLIC_VERSION === "covesa";
+
   // App and database selection
   const [selectedAppDefinition, setSelectedAppDefinition] = useState(null);
   const [databaseType, setDatabaseType] = useState("mongodb");
@@ -92,52 +95,9 @@ export default function ResultsView() {
   const [collectionName, setCollectionName] = useState("vehicles");
   const [recordCount, setRecordCount] = useState(10);
 
-  // Query management
-  const [savedQueries, setSavedQueries] = useState([
-    {
-      id: 1,
-      name: "Find Vehicles by Location",
-      collection: "vehicles",
-      queryType: "find",
-      query: `db.vehicles.find({
-  "currentLocation.latitude": { $gt: 37.0 },
-  "currentLocation.longitude": { $lt: -120.0 }
-}).limit(10)`,
-    },
-    {
-      id: 2,
-      name: "Count Vehicles with DTCs",
-      collection: "vehicles",
-      queryType: "count",
-      query: `db.vehicles.countDocuments({
-  "diagnostics.dtcCount": { $gt: 0 }
-})`,
-    },
-    {
-      id: 3,
-      name: "Aggregate Trip Distances",
-      collection: "trips",
-      queryType: "aggregate",
-      query: `db.trips.aggregate([
-  { $group: { _id: "$vehicleId", totalDistance: { $sum: "$distance" } } },
-  { $sort: { totalDistance: -1 } },
-  { $limit: 5 }
-])`,
-    },
-  ]);
-  const [currentQuery, setCurrentQuery] = useState(`db.vehicles.find({
-  "currentLocation.latitude": { $gt: 37.0 },
-  "currentLocation.longitude": { $lt: -120.0 }
-}).limit(10)`);
-  const [queryName, setQueryName] = useState("");
-  const [selectedCollection, setSelectedCollection] = useState("vehicles");
-  const [selectedQueryType, setSelectedQueryType] = useState("find");
-
   // UI state
   const [copied, setCopied] = useState(false);
   const [showConnectionDialog, setShowConnectionDialog] = useState(false);
-  const [showSaveQueryDialog, setShowSaveQueryDialog] = useState(false);
-  const [showLoadQueryDialog, setShowLoadQueryDialog] = useState(false);
   const [showSchemaDialog, setShowSchemaDialog] = useState(false);
   const [activeTab, setActiveTab] = useState("schema");
 
@@ -286,31 +246,6 @@ export default function ResultsView() {
     setActiveTab("sample-data");
   };
 
-  // Save query
-  const handleSaveQuery = () => {
-    if (!queryName.trim()) return;
-
-    const newQuery = {
-      id: Date.now(),
-      name: queryName,
-      collection: selectedCollection,
-      queryType: selectedQueryType,
-      query: currentQuery,
-    };
-
-    setSavedQueries([...savedQueries, newQuery]);
-    setShowSaveQueryDialog(false);
-    setQueryName("");
-  };
-
-  // Load query
-  const handleLoadQuery = (query) => {
-    setCurrentQuery(query.query);
-    setSelectedCollection(query.collection);
-    setSelectedQueryType(query.queryType);
-    setShowLoadQueryDialog(false);
-  };
-
   // Copy to clipboard
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -367,118 +302,106 @@ export default function ResultsView() {
             </Select>
           </div>
 
-          <div className={styles.selectGroup}>
-            <Label htmlFor="db-select" className={styles.selectLabel}>
-              Database:
-            </Label>
-            <Select value={databaseType} onValueChange={handleDatabaseChange}>
-              <SelectTrigger className={styles.dbSelect}>
-                <SelectValue placeholder="Select database" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="mongodb">MongoDB</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {isCovesaVersion && (
+            <div className={styles.selectGroup}>
+              <Label htmlFor="db-select" className={styles.selectLabel}>
+                Database:
+              </Label>
+              <Select value={databaseType} onValueChange={handleDatabaseChange}>
+                <SelectTrigger className={styles.dbSelect}>
+                  <SelectValue placeholder="Select database" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="mongodb">MongoDB</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
-          {hasRecommendation && !hasConnection && (
-            <Dialog
-              open={showConnectionDialog}
-              onOpenChange={setShowConnectionDialog}
-            >
-              <DialogTrigger asChild>
-                <Button className={styles.connectionButton}>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Set Connection
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Database Connection</DialogTitle>
-                  <DialogDescription>
-                    Configure your database connection or select a saved one
-                  </DialogDescription>
-                </DialogHeader>
+          <Dialog
+            open={showConnectionDialog}
+            onOpenChange={setShowConnectionDialog}
+          >
+            <DialogTrigger asChild>
+              <Button className={styles.connectionButton}>
+                <Settings className="mr-2 h-4 w-4" />
+                Set Connection
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Database Connection</DialogTitle>
+                <DialogDescription>
+                  Configure your database connection or select a saved one
+                </DialogDescription>
+              </DialogHeader>
 
-                {connections.length > 0 && (
-                  <div className={styles.savedConnectionsSection}>
-                    <Label>Saved Connections</Label>
-                    <div className={styles.savedConnectionsList}>
-                      {connections.map((connection) => (
-                        <div
-                          key={connection.id}
-                          className={styles.savedConnectionItem}
-                          onClick={() => handleConnectionSelect(connection.id)}
-                        >
-                          <div className={styles.connectionInfo}>
-                            <h4 className={styles.connectionName}>
-                              {connection.name}
-                            </h4>
-                            <p className={styles.connectionDetails}>
-                              {connection.databaseName} on{" "}
-                              {connection.connectionString}
-                            </p>
-                          </div>
-                          <Button variant="ghost" size="sm">
-                            <Server className="h-4 w-4" />
-                          </Button>
+              {connections.length > 0 && (
+                <div className={styles.savedConnectionsSection}>
+                  <Label>Saved Connections</Label>
+                  <div className={styles.savedConnectionsList}>
+                    {connections.map((connection) => (
+                      <div
+                        key={connection.id}
+                        className={styles.savedConnectionItem}
+                        onClick={() => handleConnectionSelect(connection.id)}
+                      >
+                        <div className={styles.connectionInfo}>
+                          <h4 className={styles.connectionName}>
+                            {connection.name}
+                          </h4>
+                          <p className={styles.connectionDetails}>
+                            {connection.databaseName} on{" "}
+                            {connection.connectionString}
+                          </p>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className={styles.connectionForm}>
-                  <div className={styles.formGroup}>
-                    <Label htmlFor="connectionName">Connection Name</Label>
-                    <Input
-                      id="connectionName"
-                      value={connectionName}
-                      onChange={(e) => setConnectionName(e.target.value)}
-                      placeholder="My MongoDB Connection"
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <Label htmlFor="connectionString">Connection String</Label>
-                    <Input
-                      id="connectionString"
-                      value={connectionString}
-                      onChange={(e) => setConnectionString(e.target.value)}
-                      placeholder={
-                        databaseType === "mongodb"
-                          ? "mongodb://username:password@host:port/"
-                          : "host:port/database"
-                      }
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <Label htmlFor="databaseName">Database Name</Label>
-                    <Input
-                      id="databaseName"
-                      value={databaseName}
-                      onChange={(e) => setDatabaseName(e.target.value)}
-                      placeholder="vehicle_signals"
-                    />
+                        <Button variant="ghost" size="sm">
+                          <Server className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <DialogFooter>
-                  <Button onClick={handleSaveConnection}>
-                    Save Connection
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          )}
+              )}
 
-          {hasRecommendation && hasConnection && !hasSampleData && (
-            <Button
-              className={styles.generateDataButton}
-              onClick={handleGenerateSampleData}
-            >
-              <Server className="mr-2 h-4 w-4" />
-              Generate Sample Data
-            </Button>
-          )}
+              <div className={styles.connectionForm}>
+                <div className={styles.formGroup}>
+                  <Label htmlFor="connectionName">Connection Name</Label>
+                  <Input
+                    id="connectionName"
+                    value={connectionName}
+                    onChange={(e) => setConnectionName(e.target.value)}
+                    placeholder="My MongoDB Connection"
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <Label htmlFor="connectionString">Connection String</Label>
+                  <Input
+                    id="connectionString"
+                    value={connectionString}
+                    onChange={(e) => setConnectionString(e.target.value)}
+                    placeholder={
+                      databaseType === "mongodb"
+                        ? "mongodb://username:password@host:port/"
+                        : "host:port/database"
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <Label htmlFor="databaseName">Database Name</Label>
+                  <Input
+                    id="databaseName"
+                    value={databaseName}
+                    onChange={(e) => setDatabaseName(e.target.value)}
+                    placeholder="vehicle_signals"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button onClick={handleSaveConnection}>Save Connection</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           {hasRecommendation && (
             <Dialog open={showSchemaDialog} onOpenChange={setShowSchemaDialog}>
@@ -600,21 +523,29 @@ export default function ResultsView() {
             <QuerySandbox
               hasSampleData={hasSampleData}
               setActiveTab={setActiveTab}
-              selectedCollection={selectedCollection}
-              setSelectedCollection={setSelectedCollection}
-              selectedQueryType={selectedQueryType}
-              setSelectedQueryType={setSelectedQueryType}
-              currentQuery={currentQuery}
-              setCurrentQuery={setCurrentQuery}
-              showSaveQueryDialog={showSaveQueryDialog}
-              setShowSaveQueryDialog={setShowSaveQueryDialog}
-              showLoadQueryDialog={showLoadQueryDialog}
-              setShowLoadQueryDialog={setShowLoadQueryDialog}
-              queryName={queryName}
-              setQueryName={setQueryName}
-              handleSaveQuery={handleSaveQuery}
-              handleLoadQuery={handleLoadQuery}
-              savedQueries={savedQueries}
+              selectedCollection="samples"
+              setSelectedCollection={() => {}}
+              selectedQueryType="aggregate"
+              setSelectedQueryType={() => {}}
+              currentQuery={JSON.stringify(
+                [
+                  { $match: { appId: selectedAppDefinition?.id } },
+                  { $limit: 10 },
+                ],
+                null,
+                2
+              )}
+              setCurrentQuery={() => {}}
+              showSaveQueryDialog={false}
+              setShowSaveQueryDialog={() => {}}
+              showLoadQueryDialog={false}
+              setShowLoadQueryDialog={() => {}}
+              queryName=""
+              setQueryName={() => {}}
+              handleSaveQuery={() => {}}
+              handleLoadQuery={() => {}}
+              savedQueries={[]}
+              appId={selectedAppDefinition?.id}
             />
           </TabsContent>
         </Tabs>

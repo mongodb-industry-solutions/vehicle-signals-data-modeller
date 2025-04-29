@@ -21,14 +21,6 @@
   color: var(--muted-foreground);
 }
 
-/* Collection tabs styling */
-.collectionTabs {
-  margin-bottom: 1.5rem;
-}
-
-.collectionTabsList {
-  margin-bottom: 1.5rem;
-}
 
 .collectionContainer {
   padding: 0.5rem;
@@ -39,17 +31,12 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .schemaCard {
-  border: 1px solid var(--border);
-  transition: box-shadow 0.2s;
+  border: 1px solid rgb(212, 212, 212);
   width: 100%;
-}
-
-.schemaCard:hover {
-  box-shadow: 0 0 0 1px hsl(var(--primary) / 10%);
 }
 
 .schemaCardContent {
@@ -57,7 +44,7 @@
 }
 
 .schemaJsonContainer {
-  background-color: hsl(var(--secondary));
+  border: 1px solid var(--border);
   border-radius: 0.375rem;
   padding: 1.2rem;
   overflow: auto;
@@ -66,8 +53,7 @@
 
 /* Indexes styling */
 .indexesContainer {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--border);
 }
 
@@ -85,15 +71,15 @@
 
 .indexItem {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   background-color: hsl(var(--secondary));
   border-radius: 0.375rem;
+  font-size: 0.875rem;
 }
 
 .indexName {
-  font-size: 0.875rem;
   font-weight: 500;
   color: var(--foreground);
   font-family: var(--font-mono);

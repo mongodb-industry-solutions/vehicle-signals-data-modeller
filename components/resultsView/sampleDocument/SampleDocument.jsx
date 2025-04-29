@@ -332,12 +332,8 @@ export default function SampleDocument({ app, schema }) {
     <Card>
       <CardHeader>
         <CardTitle className={styles.cardTitleWithIcon}>
-          <File className="mr-2 h-5 w-5" />
           Sample Documents
         </CardTitle>
-        <CardDescription>
-          Generate sample documents based on the application definition
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className={styles.controlBar}>

@@ -113,20 +113,13 @@ export default function Schema({
                     <div className={styles.indexList}>
                       {collection.indexes.map((index, idx) => (
                         <div key={idx} className={styles.indexItem}>
-                          <div className={styles.indexName}>
-                            {collection.name}.{index.name}
-                          </div>
-                          <div className={styles.indexDetails}>
-                            <Badge variant="outline">
-                              {index.unique ? "Unique" : "Compound"}
-                            </Badge>
-                            <span className={styles.indexFields}>
-                              {index.fields.join(", ")}
-                            </span>
-                            <span className={styles.indexDescription}>
-                              {index.description}
-                            </span>
-                          </div>
+                          <Badge variant="outline">
+                            {index.unique ? "Unique" : "Compound"}
+                          </Badge>
+                          <span className={styles.indexName}>
+                            {collection.name}.{index.name}:
+                          </span>{" "}
+                          {index.fields.join(", ")}
                         </div>
                       ))}
                     </div>
