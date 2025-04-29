@@ -27,3 +27,6 @@ yarn-error.log*
 next-env.d.ts
 
 .DS_Store
+Makefile
+policy.json
+task-def.json
