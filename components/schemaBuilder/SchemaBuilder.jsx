@@ -612,21 +612,10 @@ export default function SchemaBuilder() {
                         )}
                       </CardHeader>
                       <CardFooter className="p-4 pt-0 flex justify-between">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          disabled={currentTemplate === template}
-                          onClick={() => handleLoadTemplate(template)}
-                        >
-                          <FileDown className="h-4 w-4 mr-2" />
-                          {currentTemplate === template ? "Current" : "Load"}
-                        </Button>
-
                         {template !== "my_custom_schema" && (
                           <Button
-                            variant="ghost"
+                            variant="secondary"
                             size="sm"
-                            className="text-red-500 hover:text-red-700 hover:bg-red-100"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDeleteTemplate(template);
@@ -636,6 +625,20 @@ export default function SchemaBuilder() {
                             Delete
                           </Button>
                         )}
+                        {template !== "my_custom_schema" ? (
+                          <div className="flex-1"></div>
+                        ) : null}
+                        <Button
+                          variant={
+                            currentTemplate === template ? "ghost" : "default"
+                          }
+                          size="sm"
+                          disabled={currentTemplate === template}
+                          onClick={() => handleLoadTemplate(template)}
+                        >
+                          <FileDown className="h-4 w-4 mr-2" />
+                          {currentTemplate === template ? "Current" : "Load"}
+                        </Button>
                       </CardFooter>
                     </Card>
                   ))

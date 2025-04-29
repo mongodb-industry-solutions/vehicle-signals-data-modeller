@@ -323,7 +323,7 @@ export default function ResultsView() {
             onOpenChange={setShowConnectionDialog}
           >
             <DialogTrigger asChild>
-              <Button className={styles.connectionButton}>
+              <Button variant="secondary" className={styles.connectionButton}>
                 <Settings className="mr-2 h-4 w-4" />
                 Set Connection
               </Button>
@@ -461,12 +461,13 @@ export default function ResultsView() {
               No Schema Recommendations Yet
             </h3>
             <p className={styles.noRecommendationsDescription}>
-              Select your app definition and target database type, then generate
+              Please select an app definition first, then generate
               recommendations to create an optimized schema.
             </p>
             <Button
               className={styles.generateRecommendationsButton}
               onClick={handleGenerateRecommendations}
+              disabled={!selectedAppDefinition}
             >
               <ChevronRight className="mr-2 h-4 w-4" />
               Generate Recommendations

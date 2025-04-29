@@ -44,6 +44,7 @@ import {
   fetchAvailableApps,
   loadApp,
   saveApp,
+  deleteApp,
 } from "@/lib/api";
 import { formatTemplateNameForDisplay } from "@/lib/schemaUtils";
 import { BASE_TEMPLATE, BASE_METADATA } from "@/lib/base";
@@ -58,6 +59,9 @@ const DEFAULT_TEMPLATE = "my_custom_schema";
 export default function UseCaseManager() {
   // State for entity selection in AddUseCaseDialog
   const [selectedEntity, setSelectedEntity] = useState("vehicle");
+
+  // UI states
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Draft state tracks all changes before saving
   const [draftAppDef, setDraftAppDef] = useState({
@@ -76,6 +80,7 @@ export default function UseCaseManager() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [appDefinitions, setAppDefinitions] = useState([]);
   const [loadingApps, setLoadingApps] = useState(false);
+  const [deletingAppId, setDeletingAppId] = useState(null);
   const [showAppDialog, setShowAppDialog] = useState(false);
   const [showEntityDetailsDialog, setShowEntityDetailsDialog] = useState(false);
   const [entityToView, setEntityToView] = useState(null);
@@ -171,6 +176,33 @@ export default function UseCaseManager() {
       setAppDefinitions([]);
     } finally {
       setLoadingApps(false);
+    }
+  };
+
+  // Handle deleting an app definition
+  const handleDeleteApp = async (appId, e) => {
+    e.stopPropagation(); // Prevent the card click event from firing
+
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this app? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setDeletingAppId(appId);
+
+    try {
+      await deleteApp(appId);
+
+      // Refresh the app definitions list
+      await loadAvailableApps();
+    } catch (error) {
+      console.error("Error deleting app:", error);
+      // Could show an error notification here
+    } finally {
+      setDeletingAppId(null);
     }
   };
 
@@ -442,10 +474,29 @@ export default function UseCaseManager() {
         id: appId,
       };
 
+      // If this is a new app, add the ID to the draft
+      if (!draftAppDef.id) {
+        setDraftAppDef((prev) => ({
+          ...prev,
+          id: appId,
+        }));
+      }
+
       await saveApp(appDefToSave);
 
+      // Create a deep copy to avoid reference issues
+      const savedAppDef = JSON.parse(JSON.stringify(appDefToSave));
+
       // Update original app definition to match saved state
-      setOriginalAppDef({ ...appDefToSave });
+      setOriginalAppDef(savedAppDef);
+
+      // Update draft to exactly match what was saved
+      setDraftAppDef(savedAppDef);
+
+      // Show success indicator
+      setSaveSuccess(true);
+      // Hide success indicator after 3 seconds
+      setTimeout(() => setSaveSuccess(false), 3000);
 
       // Reset unsaved changes flag
       setHasUnsavedChanges(false);
@@ -595,17 +646,34 @@ export default function UseCaseManager() {
               ) : (
                 <div className={styles.appList}>
                   {appDefinitions.map((app) => (
-                    <Card
-                      key={app.id}
-                      className={styles.appCard}
-                      onClick={() => handleLoadAppDefinition(app.id)}
-                    >
+                    <Card key={app.id} className={styles.appCard}>
                       <CardHeader className="p-4">
                         <CardTitle className="text-lg">{app.name}</CardTitle>
                         <CardDescription>{app.description}</CardDescription>
                       </CardHeader>
-                      <CardFooter className="p-4 pt-0">
-                        <Badge>{app.useCaseCount || 0} use cases</Badge>
+                      <CardFooter className="p-4 pt-0 flex justify-between">
+                        <div>
+                          <Badge>{app.useCaseCount || 0} use cases</Badge>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => handleDeleteApp(app.id, e)}
+                            isLoading={deletingAppId === app.id}
+                          >
+                            <Trash2 className="h-4 w-4 mr-1" />
+                            Delete
+                          </Button>
+                          <Button
+                            variant="default"
+                            size="sm"
+                            onClick={() => handleLoadAppDefinition(app.id)}
+                          >
+                            <FileUp className="h-4 w-4 mr-1" />
+                            Load
+                          </Button>
+                        </div>
                       </CardFooter>
                     </Card>
                   ))}
@@ -625,6 +693,11 @@ export default function UseCaseManager() {
           {hasUnsavedChanges && (
             <div className={styles.unsavedBadgeContainer}>
               <Badge className={styles.unsavedBadge}>Unsaved changes</Badge>
+            </div>
+          )}
+          {saveSuccess && (
+            <div className={styles.unsavedBadgeContainer}>
+              <Badge className={styles.savedBadge}>Saved successfully</Badge>
             </div>
           )}
         </div>
