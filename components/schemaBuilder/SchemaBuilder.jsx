@@ -679,12 +679,15 @@ export default function SchemaBuilder() {
             <CardTitle className={styles.cardTitle}>
               <span>Vehicle Signal Structure</span>
             </CardTitle>
-            <CardDescription>
-              Select fields from the vehicle signal hierarchy or add custom
-              fields
-            </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent
+            style={{
+              flex: "1 1 auto",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+            }}
+          >
             <div className={styles.searchFilterContainer}>
               <SearchBar
                 onSearchChange={setSearchQuery}
@@ -703,7 +706,10 @@ export default function SchemaBuilder() {
               uniqueDatatypes={getUniqueDatatypes}
               showFilters={showFilters}
             />
-            <ScrollArea className={styles.structureScrollArea}>
+            <ScrollArea
+              className={styles.structureScrollArea}
+              style={{ height: "calc(100vh - 400px)", minHeight: "250px" }}
+            >
               {searchQuery.trim() ||
               (showFilters &&
                 (filters.types.length > 0 ||
@@ -836,8 +842,18 @@ export default function SchemaBuilder() {
               The resulting JSON schema based on your selected fields
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <ScrollArea className={styles.jsonScrollArea}>
+          <CardContent
+            style={{
+              flex: "1 1 auto",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+            }}
+          >
+            <ScrollArea
+              className={styles.jsonScrollArea}
+              style={{ height: "calc(100vh - 400px)", minHeight: "250px" }}
+            >
               <ReactJsonView
                 src={JSON.parse(jsonOutput || "{}")}
                 theme="grayscale:inverted"
