@@ -1,19 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SchemaBuilder from "@/components/schemaBuilder/SchemaBuilder";
-import UseCaseManager from "@/components/use-case-manager";
-import ResultsView from "@/components/results-view";
+import UseCaseManager from "@/components/useCaseManager/useCaseManager";
+import ResultsView from "@/components/resultsView/ResultsView";
 
 export default function Home() {
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">
-          Vehicle Signal Schema Builder & Analyzer
-        </h1>
-        <p className="text-muted-foreground">
-          Create vehicle signal schemas, define app use cases, and generate
-          optimized database structures
-        </p>
+        <h1 className="text-3xl font-bold text-center">Vehicle Signal Schema Builder</h1>
       </div>
 
       <Tabs defaultValue="schema" className="w-full">

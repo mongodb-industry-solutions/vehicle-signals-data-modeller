@@ -1,0 +1,219 @@
+.cardTitleWithIcon {
+  display: flex;
+  align-items: center;
+}
+
+.cardFooter {
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.footerButtonGroup {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+/* Controls for generating documents */
+.controlBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.timeControlsRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex: 1;
+}
+
+.inputGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inputLabel {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.numberInput {
+  width: 80px;
+}
+
+/* Statistics and filtering */
+.statsBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.documentCount {
+  color: var(--muted-foreground);
+  text-align: right;
+  min-width: 100px;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: center;
+  width: 240px;
+}
+
+.filterInput {
+  font-size: 0.875rem;
+  height: 32px;
+}
+
+/* Tabs for collection selection */
+.collectionTabs {
+  margin-bottom: 1rem;
+}
+
+.tabHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.vehicleSelector {
+  width: 240px;
+  height: 36px;
+}
+
+.tabContent {
+  padding: 0;
+}
+
+/* Document container styling */
+.documentsContainer {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Document navigation styling */
+.documentNavigation {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.documentPagination {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.navigationButtons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.documentTypeBadge {
+  font-size: 0.75rem;
+}
+
+.documentId {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.documentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.documentContent {
+  padding: 0.5rem;
+  background-color: var(--background);
+  border-radius: 0.25rem;
+  overflow: auto;
+  font-size: 0.85rem;  /* Smaller font size for JSON documents */
+}
+
+.documentList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.documentItem {
+  flex: 0 0 calc(50% - 0.5rem);
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.documentItem.singleType {
+  flex: 0 0 calc(50% - 0.5rem);
+}
+
+.noDocuments {
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+/* Document accordion styling */
+.documentAccordion {
+  border: none;
+}
+
+.documentGroup {
+  border-bottom: 1px solid var(--border);
+}
+
+.documentGroup:last-child {
+  border-bottom: none;
+}
+
+.pathHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pathInfo {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 80%;
+}
+
+.pathValue {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Validation and warning messages */
+.validationAlert {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.noAppWarning {
+  display: flex;
+  align-items: center;
+  color: hsl(var(--warning));
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}

@@ -1,6 +1,6 @@
 import { clientPromise } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
+import { EJSON } from "bson";
 
 export async function POST(req, { params }) {
   try {
@@ -11,7 +11,10 @@ export async function POST(req, { params }) {
     const database = process.env.DATABASE_NAME;
 
     const { action } = await params;
-    const body = await req.json();
+    const requestText = await req.text();
+
+    // Parse the request body with EJSON to properly handle Date objects and other MongoDB types
+    const body = EJSON.parse(requestText);
 
     const {
       collection,
@@ -46,20 +49,6 @@ export async function POST(req, { params }) {
     const client = await clientPromise;
     const db = client.db(database);
     const col = db.collection(collection);
-
-    // Transform _id to ObjectId if present in filter or pipeline
-    // TODO: This is a temporary fix, it should be handled using EJSON
-    if (filter && filter._id && ObjectId.isValid(filter._id)) {
-      filter._id = ObjectId.createFromHexString(filter._id);
-    }
-
-    if (pipeline) {
-      pipeline.forEach((stage) => {
-        if (stage.$match && stage.$match._id) {
-          stage.$match._id = ObjectId.createFromHexString(stage.$match._id);
-        }
-      });
-    }
 
     let result;
 
@@ -171,7 +160,7 @@ export async function POST(req, { params }) {
   } catch (error) {
     console.error("Error handling request:", error);
     return NextResponse.json(
-      { message: "Internal Server Error" },
+      { message: "Internal Server Error", error: error.message },
       { status: 500 }
     );
   }
