@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Dialog,
@@ -710,11 +711,11 @@ export default function SchemaBuilder() {
               className={styles.structureScrollArea}
               style={{ height: "calc(100vh - 400px)", minHeight: "250px" }}
             >
+              {/* Check if there are active filters or search query regardless of filter panel visibility */}
               {searchQuery.trim() ||
-              (showFilters &&
-                (filters.types.length > 0 ||
-                  filters.datatypes.length > 0 ||
-                  filters.required !== null)) ? (
+              filters.types.length > 0 ||
+              filters.datatypes.length > 0 ||
+              filters.required !== null ? (
                 <div className={styles.searchResults}>
                   {(() => {
                     // Use the utility function instead of local implementation
@@ -729,57 +730,96 @@ export default function SchemaBuilder() {
 
                     return filteredResults.length > 0 ? (
                       filteredResults.map((result, index) => (
-                        <div
-                          key={index}
-                          className={styles.searchResultItem}
-                          style={{ marginLeft: `${result.level * 20}px` }}
-                          onClick={() => {
-                            // Expand all parent paths
-                            const pathParts = result.path.split(".");
-                            let currentPath = "";
-                            pathParts.forEach((part) => {
-                              currentPath = currentPath
-                                ? `${currentPath}.${part}`
-                                : part;
-                              setExpandedSections((prev) => ({
-                                ...prev,
-                                [currentPath]: true,
-                              }));
-                            });
-                          }}
-                        >
-                          <div className={styles.searchResultHeader}>
+                        <div key={index} className={styles.searchResultItem}>
+                          <div className={styles.searchResultNodeCheckbox}>
+                            <Checkbox
+                              id={`search-result-${index}`}
+                              checked={!!selectedFields[result.path]}
+                              onCheckedChange={() =>
+                                toggleFieldSelection(result.path)
+                              }
+                            />
+                          </div>
+                          <div className={styles.searchResultNodeLabel}>
                             <span className={styles.searchResultPath}>
                               {result.path}
                             </span>
-                            <div className={styles.searchResultBadges}>
+                          </div>
+                          <div className={styles.searchResultBadges}>
+                            <Badge
+                              variant="outline"
+                              className={styles.typeBadge}
+                              style={{
+                                backgroundColor: typeColors[result.value.type],
+                                color:
+                                  result.value.type === "sensor"
+                                    ? "#000"
+                                    : "#fff",
+                              }}
+                            >
+                              {result.value.type}
+                            </Badge>
+                            {result.metadata?.required && (
                               <Badge
                                 variant="outline"
-                                className={styles.typeBadge}
-                                style={{
-                                  backgroundColor:
-                                    typeColors[result.value.type],
-                                  color:
-                                    result.value.type === "sensor"
-                                      ? "#000"
-                                      : "#fff",
-                                }}
+                                className={styles.requiredBadge}
                               >
-                                {result.value.type}
+                                Required
                               </Badge>
-                              {result.metadata?.required && (
-                                <Badge
-                                  variant="outline"
-                                  className={styles.requiredBadge}
-                                >
-                                  Required
-                                </Badge>
-                              )}
-                            </div>
+                            )}
                           </div>
-                          <p className={styles.searchResultDescription}>
-                            {result.metadata?.description}
-                          </p>
+                          <div className={styles.searchResultActions}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className={styles.nodeActionButton}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleViewMetadata(result.path);
+                              }}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 16v-4" />
+                                <path d="M12 8h.01" />
+                              </svg>
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className={styles.nodeActionButton}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteField(result.path);
+                              }}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                              </svg>
+                            </Button>
+                          </div>
                         </div>
                       ))
                     ) : (
