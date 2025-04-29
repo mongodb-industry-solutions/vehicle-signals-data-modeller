@@ -652,28 +652,30 @@ export default function SchemaBuilder() {
             </DialogContent>
           </Dialog>
 
-          <Button
-            className={styles.saveButton}
-            onClick={saveSchema}
-            disabled={isJsonOutputEmpty() || isSaving}
-          >
-            {isSaving ? (
-              <>Saving...</>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save Schema
-              </>
+          <div className={styles.saveButtonContainer}>
+            <Button
+              className={styles.saveButton}
+              onClick={saveSchema}
+              disabled={isJsonOutputEmpty() || isSaving}
+            >
+              {isSaving ? (
+                <>Saving...</>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Schema
+                </>
+              )}
+            </Button>
+            {saveSuccess && (
+              <span className={styles.saveSuccess}>
+                Schema saved successfully!
+              </span>
             )}
-          </Button>
-          {saveSuccess && (
-            <span className={styles.saveSuccess}>
-              Schema saved successfully!
-            </span>
-          )}
-          {saveError && (
-            <span className={styles.saveError}>Error: {saveError}</span>
-          )}
+            {saveError && (
+              <span className={styles.saveError}>Error: {saveError}</span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -881,9 +883,6 @@ export default function SchemaBuilder() {
         <Card className={styles.jsonCard}>
           <CardHeader>
             <CardTitle>JSON Schema Output</CardTitle>
-            <CardDescription>
-              The resulting JSON schema based on your selected fields
-            </CardDescription>
           </CardHeader>
           <CardContent
             style={{

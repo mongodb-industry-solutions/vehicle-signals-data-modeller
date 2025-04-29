@@ -550,11 +550,19 @@ export default function UseCaseManager() {
     setShowEntityDetailsDialog(true);
   };
 
-  // Get access patterns as an array
+  // Get access patterns as an array and ensure it returns at least one pattern
   const getAccessPatternsArray = (useCase) => {
-    if (!useCase.accessPatterns) return [];
-    if (Array.isArray(useCase.accessPatterns)) return useCase.accessPatterns;
-    return [useCase.accessPatterns];
+    if (!useCase.accessPatterns) return ["last"]; // Default to "last" when undefined
+    if (
+      Array.isArray(useCase.accessPatterns) &&
+      useCase.accessPatterns.length > 0
+    ) {
+      return useCase.accessPatterns;
+    }
+    if (typeof useCase.accessPatterns === "string") {
+      return [useCase.accessPatterns];
+    }
+    return ["last"]; // Default value if array exists but is empty
   };
 
   // Handle schema selection change
@@ -982,20 +990,14 @@ export default function UseCaseManager() {
                                 <div className={styles.detailsRow}>
                                   <div className={styles.detailItem}>
                                     <span className={styles.detailTitle}>
-                                      Access Patterns:
+                                      Access Pattern:
                                     </span>
-                                    <div className={styles.badgeContainer}>
-                                      {getAccessPatternsArray(useCase).map(
-                                        (pattern) => (
-                                          <Badge
-                                            key={pattern}
-                                            className={styles.patternBadge}
-                                          >
-                                            {pattern}
-                                          </Badge>
-                                        )
-                                      )}
-                                    </div>
+                                    <Badge
+                                      variant="outline"
+                                      className={styles.patternBadge}
+                                    >
+                                      {getAccessPatternsArray(useCase)[0]}
+                                    </Badge>
                                   </div>
 
                                   {useCase.operation && (
