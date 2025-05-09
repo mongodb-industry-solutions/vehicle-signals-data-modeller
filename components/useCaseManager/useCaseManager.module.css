@@ -1,0 +1,415 @@
+/* Core layout styles */
+.container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: var(--muted-foreground);
+}
+
+/* Schema selection styles */
+.schemaTrigger {
+  width: 200px;
+}
+
+/* Button styles */
+.addButton {
+  display: flex;
+  align-items: center;
+}
+
+/* Empty state styling */
+.emptyState {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted-foreground);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Entity section styles */
+.entitiesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.entitiesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.entitiesEmptyState {
+  flex-grow: 1;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.entitiesEmptyState p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.entitiesEmptySpace {
+  flex-grow: 1;
+}
+
+.entitiesList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.entityCard {
+  width: 100%;
+}
+
+.entityCardHeader {
+  padding-bottom: 0.5rem;
+}
+
+.entityCardTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.entityActions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Use cases styles */
+.useCasesCard {
+  width: 100%;
+}
+
+.useCasesScrollArea {
+  height: 500px;
+  width: 100%;
+  padding-right: 1rem;
+}
+
+.useCasesAccordion {
+  width: 100%;
+}
+
+.accordionTrigger {
+  width: 100%;
+  text-align: left;
+}
+
+.useCasesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.useCaseHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.useCaseName {
+  font-weight: 500;
+}
+
+.useCaseDescription {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.accordionContent {
+  padding: 0.5rem 0;
+}
+
+.detailSection {
+  margin-bottom: 0.5rem;
+}
+
+.detailTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+/* Updated styles for use case details layout */
+.useCaseDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.detailsRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+  justify-content: flex-start;
+}
+
+/* Format the individual detail items to be on a single line */
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fieldBadge,
+.patternBadge,
+.frequencyBadge,
+.operationBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: fit-content;
+}
+
+.entityTag {
+  font-size: 0.7rem;
+  background-color: var(--muted);
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.fieldTypeSmall {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.useCaseActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.useCaseCount {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* Form styles */
+.formGroup {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: start;
+  gap: 1rem;
+}
+
+.fieldForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* App buttons styles */
+.appButtons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.appButton {
+  display: flex;
+  align-items: center;
+}
+
+.unsavedBadgeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  margin-top: 4rem;
+}
+
+.unsavedBadge {
+  background-color: var(--warning);
+  color: var(--warning-foreground);
+  font-size: 0.7rem;
+}
+
+.savedBadge {
+  background-color: var(--success, #16a34a);
+  color: var(--success-foreground, white);
+  font-size: 0.7rem;
+}
+
+.appList {
+  display: grid;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.appCard {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.appCard:hover {
+  background-color: var(--muted);
+}
+
+/* Entity details dialog styles */
+.entityDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.entityFieldsTable {
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.entityFieldsHeader {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: var(--muted);
+  font-weight: 500;
+}
+
+.entityFieldsScrollArea {
+  height: 300px;
+}
+
+.entityFieldRow {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.entityFieldName {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.entityFieldType {
+  display: flex;
+  align-items: center;
+}
+
+.entityFieldDescription {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.entityFieldActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.entityDetailsActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.removeFieldButton {
+  color: var(--destructive);
+}
+
+.removeEntityButton {
+  color: var(--destructive);
+  border-color: var(--destructive);
+}
+
+/* App details styling */
+.appDetailsContainer {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.appDetailsLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.appDetailsRight {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  padding-right: 1rem;
+}
+
+.appFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.appDescriptionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.appDescriptionTextarea {
+  height: 100%;
+  min-height: 120px;
+}
+
+.appNameInput, .schemaTrigger {
+  width: 100%;
+}
+
+/* Section title styling */
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  padding: 0.75rem 0;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Override default accordion trigger styles to remove underline */
+.sectionTitle:hover {
+  text-decoration: none !important;
+  background-color: var(--accent);
+  border-radius: 4px;
+}
+
+/* Add subtle emphasis when open without underline */
+.sectionTitle[data-state="open"] {
+  margin-bottom: 0.75rem;
+  background-color: transparent;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}

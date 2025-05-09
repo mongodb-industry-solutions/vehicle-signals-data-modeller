@@ -1,0 +1,106 @@
+.cardTitleWithIcon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardFooter {
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.schemaActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.schemaStats {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+
+.collectionContainer {
+  padding: 0.5rem;
+}
+
+/* Schema cards container */
+.schemaCardsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.schemaCard {
+  border: 1px solid rgb(212, 212, 212);
+  width: 100%;
+}
+
+.schemaCardContent {
+  padding: 1.5rem;
+}
+
+.schemaJsonContainer {
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 1.2rem;
+  overflow: auto;
+  max-height: 350px;
+}
+
+/* Indexes styling */
+.indexesContainer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.indexesTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.indexList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.indexItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: hsl(var(--secondary));
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.indexName {
+  font-weight: 500;
+  color: var(--foreground);
+  font-family: var(--font-mono);
+}
+
+.indexDetails {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.indexFields {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  background-color: hsl(var(--muted) / 20%);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.indexDescription {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}

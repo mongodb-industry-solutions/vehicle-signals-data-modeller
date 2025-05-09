@@ -1,0 +1,207 @@
+.container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Header controls */
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selectGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectLabel {
+  font-weight: 500;
+}
+
+.appSelect,
+.dbSelect {
+  width: 250px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: var(--muted-foreground);
+}
+
+.connectionButton,
+.generateDataButton,
+.schemaButton {
+  display: flex;
+  align-items: center;
+}
+
+/* Empty state card */
+.noRecommendationsCard {
+  width: 100%;
+}
+
+.noRecommendationsContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.noRecommendationsIcon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--muted-foreground);
+  margin-bottom: 1rem;
+}
+
+.noRecommendationsTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.noRecommendationsDescription {
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+  max-width: 500px;
+}
+
+.generateRecommendationsButton {
+  display: flex;
+  align-items: center;
+}
+
+/* Connection dialog */
+.savedConnectionsSection {
+  margin-bottom: 1.5rem;
+}
+
+.savedConnectionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.savedConnectionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.savedConnectionItem:hover {
+  background-color: var(--muted);
+}
+
+.connectionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.connectionName {
+  font-weight: 500;
+}
+
+.connectionDetails {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.connectionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Schema history dialog */
+.schemaList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.schemaItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.schemaItem:hover {
+  background-color: var(--muted);
+}
+
+.schemaInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.schemaName {
+  font-weight: 500;
+}
+
+.schemaMeta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.schemaDate {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* Action tabs */
+.actionTabs {
+  width: 100%;
+}
+
+.actionTabsList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.actionTabsTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+}

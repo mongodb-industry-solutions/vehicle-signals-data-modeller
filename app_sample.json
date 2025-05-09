@@ -1,0 +1,59 @@
+{
+  "id": "fleet_management",
+  "name": "Fleet Management App",
+  "schemaId": "vss",
+  "customEntities": [
+    {
+      "id": "driver",
+      "name": "Driver",
+      "fields": [
+        { "id": "driver.id", "name": "Driver ID", "type": "String" },
+        { "id": "driver.name", "name": "Name", "type": "String" },
+        { "id": "driver.license", "name": "License Number", "type": "String" },
+        {
+          "id": "driver.phoneNumber",
+          "name": "Phone Number",
+          "type": "String"
+        },
+        { "id": "driver.email", "name": "Email", "type": "String" }
+      ]
+    },
+    {
+      "id": "trip",
+      "name": "Trip",
+      "fields": [
+        { "id": "trip.id", "name": "Trip ID", "type": "String" },
+        { "id": "trip.startTime", "name": "Start Time", "type": "Date" },
+        { "id": "trip.endTime", "name": "End Time", "type": "Date" },
+        {
+          "id": "trip.startLocation",
+          "name": "Start Location",
+          "type": "Object"
+        },
+        { "id": "trip.endLocation", "name": "End Location", "type": "Object" },
+        { "id": "trip.distance", "name": "Distance", "type": "Number" },
+        {
+          "id": "trip.fuelConsumption",
+          "name": "Fuel Consumption",
+          "type": "Number"
+        }
+      ]
+    }
+  ],
+  "useCases": [
+    {
+      "name": "PRODUCTIVITY01",
+      "description": "Real-time asset tracking",
+      "fields": [
+        "Vehicle.VehicleIdentification.VIN",
+        "Vehicle.CurrentLocation.Latitude",
+        "Vehicle.CurrentLocation.Longitude",
+        "Vehicle.CurrentLocation.Timestamp",
+        "Vehicle.CurrentLocation.Altitude"
+      ],
+      "operation": "read",
+      "accessPatterns": "last",
+      "frequency": "high"
+    }
+  ]
+}
