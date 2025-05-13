@@ -4,21 +4,23 @@ The Vehicle Signals Data Modeller is a prototype designed to facilitate the adop
 
 As connected vehicles generate increasingly larger volumes of data, efficiently structuring and managing this information becomes critical. VSS provides a standardized way to define vehicle data (like speed, tire pressure, interior lights, etc.), but implementing applications that adhere to this specification requires careful consideration of access patterns, query performance, and schema design.
 
+![Data Modeller High-Level Architecture](/public/vss-data-modeller-architecture.svg)
+
 ## Features
 
 The application consists of three main modules:
 
-### 1. Schema Definition
+### 1. Schema Builder
 
 A graphical user interface for vss-tools equivalent transformations. This module allows you to visually navigate and model vehicle signal schemas based on the VSS hierarchy. The current implementation provides standalone functionality, though future versions may integrate directly with vss-tools.
 
-### 2. Application Use Case Definition
+### 2. Use Case Mapper
 
 Define how signals from your schema are used in different application scenarios. By identifying data that is written or read together, along with frequency and importance measurements, you can generate valuable insights to optimize your data model.
 
-### 3. Database Model Generation
+### 3. Database Exporter
 
-Based on the application use cases defined in step 2, the system recommends preliminary database schema designs optimized for your specific needs. You can then generate sample data, export it to a MongoDB instance, and test aggregation pipelines to evaluate real-world performance.
+Based on the application use cases defined in step 2, the system recommends preliminary database schema designs optimized for your specific needs. You can then generate sample data, export it to a MongoDB instance, and test aggregation pipelines to evaluate performance.
 
 ## Prerequisites
 
