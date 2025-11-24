@@ -1,0 +1,4 @@
+envSecrets:
+  MONGODB_URI: vehicle-data-modeller
+  DATABASE_NAME: vehicle-data-modeller
+  NEXT_PUBLIC_VERSION: vehicle-data-modeller
