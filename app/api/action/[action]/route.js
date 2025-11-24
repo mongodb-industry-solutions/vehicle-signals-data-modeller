@@ -2,6 +2,8 @@ import { clientPromise } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { EJSON } from "bson";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req, { params }) {
   try {
     if (!process.env.DATABASE_NAME) {
