@@ -48,6 +48,7 @@ import {
 } from "@/lib/api";
 import { formatTemplateNameForDisplay } from "@/lib/schemaUtils";
 import { BASE_TEMPLATE, BASE_METADATA } from "@/lib/base";
+import { isProtectedApp } from "@/lib/protected";
 import styles from "./useCaseManager.module.css";
 import AddEntityDialog from "./addEntityDialog/AddEntityDialog";
 import AddUseCaseDialog from "./addUseCaseDialog/AddUseCaseDialog";
@@ -75,6 +76,7 @@ export default function UseCaseManager() {
 
   // Original app definition from database (for comparison)
   const [originalAppDef, setOriginalAppDef] = useState(null);
+  const [originalAppName, setOriginalAppName] = useState(null);
 
   // UI states
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -180,8 +182,14 @@ export default function UseCaseManager() {
   };
 
   // Handle deleting an app definition
-  const handleDeleteApp = async (appId, e) => {
+  const handleDeleteApp = async (appId, appName, e) => {
     e.stopPropagation(); // Prevent the card click event from firing
+
+    // Check if the app is protected
+    if (isProtectedApp(appName)) {
+      alert(`Cannot delete the protected app "${appName}".`);
+      return;
+    }
 
     if (
       !window.confirm(
@@ -466,7 +474,30 @@ export default function UseCaseManager() {
   // Handle saving the current app definition
   const handleSaveAppDefinition = async () => {
     try {
-      const appId = draftAppDef.id || `app_${Date.now()}`;
+      // Check if trying to save over a protected app with the same name
+      if (
+        originalAppName &&
+        isProtectedApp(originalAppName) &&
+        draftAppDef.name === originalAppName
+      ) {
+        alert("Duplicate name. Please change the app name before saving.");
+        return;
+      }
+
+      // If the app was originally protected and the name has changed,
+      // create a new app ID to prevent overwriting the protected app
+      let appId;
+      if (
+        originalAppName &&
+        isProtectedApp(originalAppName) &&
+        draftAppDef.name !== originalAppName
+      ) {
+        // Generate a new ID for the modified protected app
+        appId = `app_${Date.now()}`;
+      } else {
+        // Use existing ID or create new one
+        appId = draftAppDef.id || `app_${Date.now()}`;
+      }
 
       // Ensure the app has an ID
       const appDefToSave = {
@@ -474,8 +505,8 @@ export default function UseCaseManager() {
         id: appId,
       };
 
-      // If this is a new app, add the ID to the draft
-      if (!draftAppDef.id) {
+      // If this is a new app or a modified protected app, add the ID to the draft
+      if (!draftAppDef.id || (originalAppName && isProtectedApp(originalAppName) && draftAppDef.name !== originalAppName)) {
         setDraftAppDef((prev) => ({
           ...prev,
           id: appId,
@@ -489,6 +520,7 @@ export default function UseCaseManager() {
 
       // Update original app definition to match saved state
       setOriginalAppDef(savedAppDef);
+      setOriginalAppName(savedAppDef.name); // Track the original app name
 
       // Update draft to exactly match what was saved
       setDraftAppDef(savedAppDef);
@@ -533,6 +565,7 @@ export default function UseCaseManager() {
       // Update both draft and original app definitions
       setDraftAppDef(normalizedAppDef);
       setOriginalAppDef(normalizedAppDef);
+      setOriginalAppName(normalizedAppDef.name); // Track the original app name
 
       // Reset unsaved changes flag
       setHasUnsavedChanges(false);
@@ -603,6 +636,7 @@ export default function UseCaseManager() {
       customEntities: [],
     });
     setOriginalAppDef(null);
+    setOriginalAppName(null);
     setHasUnsavedChanges(false);
   };
 
@@ -664,15 +698,17 @@ export default function UseCaseManager() {
                           <Badge>{app.useCaseCount || 0} use cases</Badge>
                         </div>
                         <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => handleDeleteApp(app.id, e)}
-                            isLoading={deletingAppId === app.id}
-                          >
-                            <Trash2 className="h-4 w-4 mr-1" />
-                            Delete
-                          </Button>
+                          {!isProtectedApp(app.name) && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => handleDeleteApp(app.id, app.name, e)}
+                              isLoading={deletingAppId === app.id}
+                            >
+                              <Trash2 className="h-4 w-4 mr-1" />
+                              Delete
+                            </Button>
+                          )}
                           <Button
                             variant="default"
                             size="sm"

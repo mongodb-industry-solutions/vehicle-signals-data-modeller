@@ -45,6 +45,7 @@ import {
   deleteTemplate,
 } from "@/lib/api";
 import { filterDocumentStructure } from "@/lib/filterUtils";
+import { isProtectedSchema } from "@/lib/protected";
 
 const ReactJsonView = dynamic(() => import("@microlink/react-json-view"), {
   ssr: false,
@@ -76,6 +77,7 @@ export default function SchemaBuilder() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [availableTemplates, setAvailableTemplates] = useState([]);
   const [currentTemplate, setCurrentTemplate] = useState("vss");
+  const [originalTemplateId, setOriginalTemplateId] = useState(null);
 
   // Initialize with base template when component mounts
   useEffect(() => {
@@ -83,6 +85,7 @@ export default function SchemaBuilder() {
     setDocumentStructure(BASE_TEMPLATE.schema);
     setMetadataDocuments(BASE_METADATA);
     setCurrentTemplate(BASE_TEMPLATE.template);
+    setOriginalTemplateId(BASE_TEMPLATE.template);
 
     // Format the template name for display
     const formattedName = formatTemplateNameForDisplay(BASE_TEMPLATE.template);
@@ -144,6 +147,7 @@ export default function SchemaBuilder() {
 
       setDocumentStructure(result.schema);
       setCurrentTemplate(templateId);
+      setOriginalTemplateId(templateId); // Track the original template ID
 
       // Also fetch metadata for this template
       await loadMetadataForTemplate(templateId);
@@ -385,6 +389,19 @@ export default function SchemaBuilder() {
 
       const formattedTemplateName = formatSchemaName(schemaName);
 
+      // Check if trying to save over a protected schema with the same name
+      if (
+        originalTemplateId &&
+        isProtectedSchema(originalTemplateId) &&
+        formattedTemplateName === originalTemplateId
+      ) {
+        setSaveError(
+          "Duplicate name. Please change the schema name before saving."
+        );
+        setIsSaving(false);
+        return;
+      }
+
       // Filter metadata documents to only include selected fields
       const selectedMetadataDocuments = metadataDocuments.filter(
         (doc) => selectedFields[doc.id] === true
@@ -438,6 +455,7 @@ export default function SchemaBuilder() {
 
       setSaveSuccess(true);
       setCurrentTemplate(formattedTemplateName);
+      setOriginalTemplateId(formattedTemplateName); // Update original template ID after saving
 
       // Refresh available templates after saving
       try {
@@ -504,9 +522,13 @@ export default function SchemaBuilder() {
   // Handle deleting a template
   const handleDeleteTemplate = async (templateId) => {
     try {
-      if (templateId === "my_custom_schema") {
-        // Don't allow deleting the base template
-        alert("Cannot delete the base VSS template");
+      // Check if the template is protected
+      if (isProtectedSchema(templateId)) {
+        alert(
+          `Cannot delete the protected schema "${formatTemplateNameForDisplay(
+            templateId
+          )}".`
+        );
         return;
       }
 
@@ -612,7 +634,7 @@ export default function SchemaBuilder() {
                         )}
                       </CardHeader>
                       <CardFooter className="p-4 pt-0 flex justify-between">
-                        {template !== "my_custom_schema" && (
+                        {!isProtectedSchema(template) && (
                           <Button
                             variant="secondary"
                             size="sm"
@@ -625,7 +647,7 @@ export default function SchemaBuilder() {
                             Delete
                           </Button>
                         )}
-                        {template !== "my_custom_schema" ? (
+                        {!isProtectedSchema(template) ? (
                           <div className="flex-1"></div>
                         ) : null}
                         <Button
