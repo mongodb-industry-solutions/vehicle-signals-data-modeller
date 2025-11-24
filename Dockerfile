@@ -5,7 +5,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm i --legacy-peer-deps
+RUN npm ci
 
 FROM base AS builder
 WORKDIR /app
@@ -34,8 +34,8 @@ COPY --from=builder /app/.env.production ./.env.production
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 8080
 
-ENV PORT=3000
+ENV PORT=8080
 
 CMD ["npm", "start"]
