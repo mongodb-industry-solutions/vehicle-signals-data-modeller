@@ -44,7 +44,7 @@ steps:
       release: vehicle-data-modeller
       values:
         - "image.tag=git-${DRONE_COMMIT_SHA:0:7}"
-        - "image.repository=795250896452.dkr.ecr.us-east-1.amazonaws.com/industrysolutions/vehicle-data-modeller
+        - "image.repository=795250896452.dkr.ecr.us-east-1.amazonaws.com/industrysolutions/vehicle-data-modeller"
         - "ingress.enabled=true"
         - "ingress.hosts[0]=vehicle-data-modeller.industrysolutions.staging.corp.mongodb.com"
         - "mesh.enabled=true"
